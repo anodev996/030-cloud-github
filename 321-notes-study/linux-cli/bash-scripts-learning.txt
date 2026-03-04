@@ -1,0 +1,2508 @@
+# =========================================================================================================================================
+Topics
+Topics
+Topics
+# =========================================================================================================================================
+
+# ~/.bashrc and ~/.bash_profile
+
+# HashBangs (#!)
+
+# Formatting in Bash scripts (i.e. spaces)
+
+# Wildcards and Replacements in Bash
+
+# Programs and Processes
+
+# Processes ; Foreground and Background run
+
+        # 3 ways in which you may supply data to a Bash script
+
+        # ===Arguments===
+
+        # ===Data Streams===
+
+# about && ; || in Bash
+
+# about (source) or (.) command in Bash
+
+# ==="echo"===
+
+# ===Quotes===
+
+# ===Brackets===
+
+        # ===VARIABLES=== ; export ; variable scope
+
+        # ===Arrays===
+
+        # Special Variables ($0, $?, etc)
+
+# Bash Arithmetic
+
+# ===USER INPUT=== (script arguments, read, from STDIN)
+
+        # ===COMPARISON / (test) | ([]) ===
+
+        # ===CONDITIONS=== (if )
+
+        # ===CASE Statements===
+
+# ===LOOPS=== (for, while, until, select mechanism)
+
+# ===FUNCTIONS=== + command (command)
+
+# ===EXIT CODES===
+
+
+
+
+
+
+# =========================================================================================================================================
+Formatting in Bash scripts (e.g. spaces)
+# =========================================================================================================================================
+
+    # Under normal circumstances Bash USES A SPACE TO DETERMINE SEPARATE ITEMS.
+
+
+# The main reason for this[formating in Bash scripts] is that Bash was originally developed as an interface 
+# for Users to interact with the system and later extended to have more powerful scripting capabilities. 
+# 
+# Many decisions regarding it's behaviour were made considering only the needs of the user 
+# and then scripting capabilities had to be worked in, later, around those decisions. 
+# 
+# People generally don't mind this however as Bash scripts are still an awesome tool for 
+# quickly and easily joining existing programs into more powerful solutions.
+
+
+
+
+
+
+
+# =========================================================================================================================================
+Programs and Processes
+# =========================================================================================================================================
+
+
+    # In the realm of Linux (and computers in general) we have the concept of PROGRAMS AND PROCESSES. 
+    #
+    # A program is a blob of binary data consisting of a series of instructions for the CPU and possibly other 
+    # resources (images, sound files and such) organised into a package and typically stored on your hard disk. 
+    #
+    # When we say we are running a program 
+    # WE ARE NOT REALLY RUNNING THE PROGRAM BUT A COPY OF IT WHICH IS CALLED A PROCESS. 
+    # WHAT WE DO IS COPY THOSE INSTRUCTIONS AND RESOURCES FROM THE HARD DISK INTO WORKING MEMORY (OR RAM). 
+    #
+    # We also allocate a bit of space in RAM for the process to store variables (to hold temporary working data) 
+    # and a few flags to allow the operating system (OS) to manage and track the process during it's execution.
+
+
+# Essentially a process is a running instance of a program.
+
+
+
+
+
+
+# =========================================================================================================================================
+HashBangs (#!)
+# =========================================================================================================================================
+
+    #!/usr/bin/bash
+    # OR
+    #!/bin/bash
+    # 
+    # /bin is a link(shortcut) in main directory. It leads to /usr/bin
+
+
+# Formatting is important here.
+#
+# The shebang must be on the very first line of the file (line 2 won't do, even if the first line is blank). 
+#
+# There must also be no spaces before the # or between the ! and the path to the interpreter.
+
+
+
+
+# =========================================================================================================================================
+3 ways in which you may supply data to a Bash script
+# =========================================================================================================================================
+
+    # Remember there are 3 ways in which you may supply data to a Bash script:
+    #
+    # --As command line arguments
+    # --Redirected in as STDIN
+    # --Read interactively during script execution
+
+
+# convenient -- подходящий
+# Your script may use one or a combination of these but should always aim to be the most convenient for the user.
+#
+# Command line arguments are good as they will be retained in the users history 
+# making it easy for them to rerun commands. 
+# Command line arguments are also convenient when the script is not run directly 
+# by the user (eg, as part of another script or a cron task etc).
+#
+# Redirected from STDIN is good when your script is behaving like a filter 
+# and just modifying or reformatting data that is fed to it.
+#
+# Reading interactively is good when you don't know what data may be required until the script is already running. 
+# e.g. You may need to clarify some suspicious or erroneous input. 
+# Passwords are also ideally asked for this way so they aren't kept as plain text in the users history.
+
+
+
+# =========================================================================================================================================
+about && ; || in Bash
+# =========================================================================================================================================
+
+    ( && ) -- Run if first command succeeds
+
+    $ mkdir /root/newdir && echo "che ne polychetsa?"
+    mkdir: cannot create directory ‘/root/newdir’: Permission denied
+
+
+
+( || ) -- Run if first command fails
+
+$ false || echo hi
+hi
+
+# you won't see hi
+$ false && echo hi
+
+$ (mkdir /root/newdir && touch /root/newdir/file1) || echo "obser!"
+$ mkdir /root/newdir || echo "obser!"
+
+
+
+    ( ; ) -- Always Run
+
+    $ false ; true ; echo hey
+    hey
+
+
+
+# =========================================================================================================================================
+about (source) or (.) command in Bash
+# =========================================================================================================================================
+
+    if [ -f ~/.bash_aliases ]; then
+        . ~/.bash_aliases
+    fi
+
+
+# (source) is a Bash shell built-in command that executes 
+# the content of the file passed as an argument IN THE CURRENT SHELL. 
+# 
+# It has a synonym in (.) period.
+
+
+
+# SYNTAX:
+
+. filename [arguments]
+
+source filename [arguments]
+
+
+
+
+# =========================================================================================================================================
+# ==="echo"===
+# =========================================================================================================================================
+
+    # with "echo -e" you're making "echo" to enable interpret backslash escapes.
+    $ echo "abc\n def \nghi" 
+    abc\n def \nghi
+
+    $ echo -e "abc\n def \nghi"
+    abc
+     def 
+    ghi
+
+echo "Hello"
+# OR
+echo Hello
+
+    # Execute SHELL command in string
+    echo "I'am $(whoami)"
+
+# Precede(перед) the character with a backslash (\).
+# This tells bash to interpret the next character literally.
+echo I\'m a string 
+
+
+# =========================================================================================================================================
+# ===Quotes===
+# =========================================================================================================================================
+
+
+    # Single quotes will treat every character literally.
+    # Double quotes will allow you to do substitution (that is include variables within the setting of the value).
+
+    # There is the weak quotes ("abc")
+    # and the strong quotes ('abc')
+    # 
+    # Single quotes (') are convenient when you don't want to use the escape
+    # characters to change how Bash interprets the input string.
+    # 
+    # On the other hand, double quotes (") preserve the literal value of 
+    # all characters except for ($), (`), ("), (\), and the (!) character
+    # when history expansion is enabled.
+    # 
+    # The (!) character has no special meaning within double quotes when the
+    # shell is in POSIX mode, even if history expansion is enabled. History
+    # expansion is disabled if there is a (!) character within
+    # the double quotes, and it is escaped using a backslash.
+    # 
+    # Within double quotes, a backslash character (\) has a special meaning
+    # only when it is followed by ($), (`), ("), (\), or a newline character.
+    # If it is followed by any of those characters within double quotes,
+    # the backslash does not appear in the output. A double quote
+    # is allowed within double quotes if a backslash precedes it.
+    # 
+    # Double quotes also give the (*) and (@) characters special meaning when
+    # shell expansion is introduced using the ($) character.
+    # For example, ($@) passes the specified parameters separately,
+    # while ($*) passes all parameters as a single parameter.
+
+    $ echo 'Aleksandr Reva -- "Chika"'
+    Aleksandr Reva -- "Chika"
+
+    $ echo "Aleksandr Reva -- "Chika""
+    Aleksandr Reva -- Chika
+
+
+# If we set:
+a=apple      # a simple variable
+arr=(apple)  # an indexed array with a single element
+
+# #   Expression   Result      Comment
+# 1   "$a"         apple       variables are expanded inside ""
+# 2   '$a'         $a          variables are not expanded inside ''
+# 3   "'$a'"       'apple'     '' has no special meaning inside ""
+# 4   '"$a"'       "$a"        "" is treated literally inside ''
+# 5   '\''         invalid     can not escape a ' within ''; use "'" or $'\'' (ANSI-C quoting)
+# 6   "red$arocks" red         $arocks does not expand $a; use ${a}rocks to preserve $a
+# 7   "redapple$"  redapple$   $ followed by no variable name evaluates to $
+# 8   '\"'         \"          \ has no special meaning inside ''
+# 9   "\'"         \'          \' is interpreted inside "" but has no significance for '
+# 10  "\""         "           \" is interpreted inside ""
+# 11  "*"          *           glob does not work inside "" or ''
+# 12  "\t\n"       \t\n        \t and \n have no special meaning inside "" or ''; use ANSI-C quoting
+# 13  "`echo hi`"  hi          `` and $() are evaluated inside "" (backquotes are retained in actual output)
+# 14  '`echo hi`'  `echo hi`   `` and $() are not evaluated inside '' (backquotes are retained in actual output)
+# 15  '${arr[0]}'  ${arr[0]}   array access not possible inside ''
+# 16  "${arr[0]}"  apple       array access works inside ""
+# 17  $'$a\''      $a'         single quotes can be escaped inside ANSI-C quoting
+# 18  "$'\t'"      $'\t'       ANSI-C quoting is not interpreted inside ""
+# 19  '!cmd'       !cmd        history expansion character '!' is ignored inside ''
+# 20  "!cmd"       cmd args    expands to the most recent command matching "cmd"
+# 21  $'!cmd'      !cmd        history expansion character '!' is ignored inside ANSI-C quotes
+
+# =========================================================================================================================================
+# ===VARIABLES=== ; export ; variable scope
+# =========================================================================================================================================
+
+
+# Command substitution is nice and simple if the output of the command is a single word or line. 
+# If the output goes over several lines then THE NEWLINES ARE SIMPLY REMOVED AND ALL THE OUTPUT ENDS UP ON A SINGLE LINE.
+#
+$ myvar=$( ls )
+$ echo $myvar
+$ bin Documents Desktop Downloads public_html ...
+
+
+
+    $myvar="value" #must be no spaces when assign a value to variable
+    # OR
+    myvar="value"
+
+
+
+#!/usr/bin/bash
+myvar="A\n69"
+echo -e myvar
+
+$ ~/test.sh
+A
+69
+
+
+    #!/usr/bin/bash
+    myvar="123"
+    echo "hey ${myvar}girlie" 
+    echo 'hey ${myvar}girlie'
+
+    $ ~/test.sh
+    hey 123girlie
+    hey ${myvar}girlie
+
+
+
+# ===(export) command===
+
+# The idea is that variables are limited to the process they were created in.
+# Normally this isn't an issue but sometimes, for instance, a script may run 
+# another script as one of its commands.
+#
+# If we want the variable to be available to the second script then we need to (export) the variable.
+
+
+# This is script_1.sh
+
+#!/bin/bash
+# demonstrate variable scope of (script_1.sh)
+var1=blah
+var2=foo
+# Let's verify their current value
+echo $0 :: var1 : $var1, var2 : $var2
+
+export var1
+
+./script_2.sh
+
+echo $0 :: var1 : $var1, var2 : $var2
+
+
+# This is script_2.sh
+
+#!/bin/bash
+# demonstrate variable scope (script_2.sh)
+# Let's verify their current value
+echo $0 :: var1 : $var1, var2 : $var2
+
+var1=flop
+var2=bleh
+
+
+# bash output:
+$ ./script1.sh
+script1.sh :: var1 : blah, var2 : foo
+script2.sh :: var1 : blah, var2 :
+script1.sh :: var1 : blah, var2 : foo
+
+
+# What actually happens when we (export) a variable is that we are telling
+# Bash that every time a new process is created (to run another script or such)
+# then make a copy of the variable and hand it over to the new process.
+# So although the variables will have the same name they exist in separate
+# processes and so are unrelated to each other.
+# 
+# Exporting variables is a one way process.
+# The 1(original) process may pass variables over to the 2(new) process
+# but anything 2(new) process does with the copy of the variables
+# has no impact on the 1(original) variables.
+
+
+
+
+
+    # ===Variable Scope===
+    
+    # The scope in a program or script is a region where 
+    # the variables have their existence. 
+    # 
+    # If a variable is declared inside a function then it is generally a local 
+    # variable and if it is declared outside then it is a global variable. 
+    # 
+    # In the case of a bash script, this concept is a little bit different, 
+    # here any variable whether it is written inside a function or outside 
+    # a function BY DEFAULT IS A GLOBAL VARIABLE. 
+    # 
+    # To make a local variable we need to use the keyword (local).
+
+    #!/bin/bash
+    var1="Apple" # global variable
+    myfun(){
+        local var2="Banana" #local variable
+        var3="Cherry" #global variable
+        echo "The name of first fruit is $var1"
+        echo "The name of second fruit is $var2"
+    }
+    myfun
+
+    echo "The name of first fruit is $var1"
+    # trying to access local variable
+    echo "The name of second fruit is $var2"
+    echo "The name of third fruit is $var3"
+
+
+
+    $ ~/test.sh
+    The name of first fruit is Apple
+    The name of second fruit is Banana
+    The name of first fruit is Apple
+    The name of second fruit is 
+    The name of third fruit is Cherry
+
+    # Here in this above example, var2 is a local variable, 
+    # so when we are accessing it from the function it is doing fine 
+    # but when we are trying to access it outside the function, 
+    # it is giving us an empty result in the output.
+    # 
+    # 
+    # On the other hand, unlike programming languages, even though 
+    # var3 is defined inside a function still it is acting as a global 
+    # variable and it can be accessed outside the function.
+
+
+
+
+    # Scope refers to which parts of a script can see which variables.
+    # By default ANY variable in script is global.
+    # This means that it is visible everywhere in the script.
+    # 
+    # We may also create a variable as a local variable.
+    # When we create a local variable within a function,
+    # it is only visible within that function.
+    # 
+    # To do that we use the keyword local in front of the variable
+    # the first time we set it's value.
+    local myvar='SomeValue'
+
+
+    # Experimenting with variable scope
+    
+    #!/bin/bash
+
+    var_change () {
+    local var1='local 1'
+    echo Inside function: var1 is $var1 : var2 is $var2
+    var1='changed again'
+    var2='2 changed again'
+    }
+
+    var1='global 1'
+    var2='global 2'
+
+    echo Before function call: var1 is $var1 : var2 is $var2
+
+    var_change
+
+    echo After function call: var1 is $var1 : var2 is $var2
+
+
+
+
+    $ ~/test.sh
+    Before function call: var1 is global 1 : var2 is global 2
+    Inside function: var1 is local 1 : var2 is global 2
+    After function call: var1 is global 1 : var2 is 2 changed again
+
+
+# =========================================================================================================================================
+Special Variables ($0, $?, etc)
+# =========================================================================================================================================
+    
+    # $0 - The name of the Bash script.
+    # 
+    # $1 - $9 - The first 9 arguments to the Bash script. (As mentioned above.)
+    # $# - How many arguments were passed to the Bash script.
+    # $@ - All the arguments supplied to the Bash script.
+    # 
+    # $? - The exit status of the most recently run process.
+    # 
+    # $$ - The process ID of the current script.
+    # 
+    # $USER - The username of the user running the script.
+    # $HOSTNAME - The hostname of the machine the script is running on.
+    # $SECONDS - The number of seconds since the script was started.
+    # 
+    # $RANDOM - Returns a different random number each time is it referred to.
+    # This number is between 0 and 32767 which is not always the most useful.
+    # 
+    # $LINENO - Returns the current line number in the Bash script.
+
+
+
+
+
+# =========================================================================================================================================
+# ===USER INPUT=== (script arguments, read, from STDIN)
+# =========================================================================================================================================
+
+
+    So we now have 3 methods for getting input from the user:
+
+    --Command line arguments
+    --Read input during script execution
+    --Accept data that has been redirected into the Bash script via STDIN
+
+
+
+echo "Who are you?"
+read who   #who is a variable here
+echo "Hello, $who!"
+
+
+# Two commonly used options however are -p which allows you to specify a prompt and -s which makes the input silent.
+
+#!/bin/bash
+# Ask the user for login details
+read -p 'Username: ' uservar
+read -sp 'Password: ' passvar
+echo
+echo Thankyou $uservar we now have your login details
+
+
+    
+    #!/bin/bash
+    # Demonstrate how read actually works
+    echo What cars do you like?
+
+    read car1 car2 car3
+    
+    echo Your first car was: $car1
+    echo Your second car was: $car2
+    echo Your third car was: $car3
+
+
+    $ ./cars.sh
+    What cars do you like?
+    $ Jaguar Maserati Bentley
+    Your first car was: Jaguar
+    Your second car was: Maserati
+    Your third car was: Bentley
+
+    $ ./cars.sh
+    What cars do you like?
+    $ Jaguar Maserati Bentley Lotus
+    Your first car was: Jaguar
+    Your second car was: Maserati
+    Your third car was: Bentley Lotus
+
+    # If there are less items than variable names then the remaining variable names will be set to blank or null.
+
+
+
+
+# Bash accomodates piping and redirection by way of special files. 
+# Each process gets it's own set of files (one for STDIN, STDOUT and STDERR respectively) 
+# and they are linked when piping or redirection is invoked. Each process gets the following files:
+# 
+# STDIN - /proc/<processID>/fd/0
+# STDOUT - /proc/<processID>/fd/1
+# STDERR - /proc/<processID>/fd/2
+# 
+# 
+# To make life more convenient the system creates some shortcuts for us:
+# 
+# STDIN - /dev/stdin or /proc/self/fd/0
+# STDOUT - /dev/stdout or /proc/self/fd/1
+# STDERR - /dev/stderr or /proc/self/fd/2
+# 
+# fd in the paths above stands for file descriptor.
+
+
+
+# So if we would like to make our script able to process data that is piped to it all we need to do is 
+# read the relevant file. 
+# All of the files mentioned above behave like normal files.
+# 
+#!/bin/bash
+# 
+# A basic summary of my sales report
+echo Here is a summary of the sales data:
+echo ====================================
+echo
+
+cat /dev/stdin | cut -d' ' -f 2,3 | sort
+
+
+
+$ cat salesdata.txt
+Fred apples 20 December 4
+Susy oranges 5 December 7
+Mark watermelons 12 December 10
+Terry peaches 7 December 15
+
+$ cat salesdata.txt | ~/myscript.sh
+Here is a summary of the sales data:
+====================================
+apples 20
+oranges 5
+peaches 7
+watermelons 12
+
+
+
+    # ===Choosing Iput Method==
+
+    # Command line arguments
+    # 
+    # You should normally favor command line arguments wherever possible. 
+    # They are the most convenient for users as the data will be stored in their command history 
+    # so they can easily return to it. 
+    # It is also the best approach if your script may be called by 
+    # other scripts or processes (eg. maybe you want it to run periodically using CRON).
+
+
+    # Ask for input
+    # 
+    # Sometimes the nature of the data is such that it would not be ideal for it to be stored in 
+    # peoples command histories etc. 
+    # A good example of this is login credentials (username and password). 
+    # In these circumstances it is best to read the data during script execution.
+
+    # Read from STDIN
+    # 
+    # If all the script is doing is processing data in a certain way then it is probably best to work with STDIN. 
+    # This way it can easily be added into a pipeline.
+
+
+    # Mix of the above 
+    # 
+    # Sometimes you may find that a combination is ideal. 
+    # The user may supply a filename as a command line argument and if not then 
+    # the script will process what it finds on STDIN (when we look at If statements we'll see how this may be achieved). 
+    # 
+    # Or maybe command line arguments define certain behaviour but 
+    # read is also used to ask for more information if required.
+
+
+
+
+
+
+
+
+
+# =========================================================================================================================================
+# ===COMPARISON / (test) | ([]) ===
+# =========================================================================================================================================
+
+    # In order to compare numbers, you will use the operators in the number
+    # comparison column, such as -lt for less than.
+    # 
+    # In order to compare strings, you will use the operators in the string
+    # comparison column, such as < for less than.
+    # 
+    # Number      String        Description
+    # Comparison  Comparison
+    # -eq         ==            Equal
+    # -ne         !=            Not equal
+    # -gt         >             Greater than
+    # -ge         >=            Greater than or equal
+    # -lt         <             Less than
+    # -le         <=            Less than or equal
+
+
+
+
+
+# =========================================================================================================================================
+Bash Arithmetic
+# =========================================================================================================================================
+
+
+    # There are others expressions but these are the most commonly used
+
+    # Operator        Operation
+
+    # +, -, \*, /     addition, subtraction, multiply, divide
+    # var++           Increase the variable var by 1
+    # var--           Decrease the variable var by 1
+    # %               Modulus (Return the remainder after division)
+
+
+
+
+let <arithmetic expression>
+# Make a variable equal to an expression.
+
+# The first part is generally always a variable which the result is saved into.
+let a=5+4
+echo $a # 9
+# This is the basic format. 
+# Note that if we don't put quotes around the expression then it must be written with no spaces.
+
+
+
+let "a = 5 + 4"
+echo $a # 9
+# This time we have used quotes which allow us to space out the expression to make it more readable.
+
+
+let a++
+echo $a # 10
+# This is a shorthand for increment the value of the variable a by 1. It is the same as writing "a = a + 1".
+
+
+
+let "a = 4 * 5"
+echo $a # 20
+
+let "a = $1 + 30"
+echo $a # 30 + first command line argument
+
+
+
+
+
+
+    expr item1 operator item2
+    # print out the result of the expression.
+
+
+    # (expr) is similar to let except instead of saving the result to a variable IT INSTEAD PRINTS THE ANSWER. 
+    # 
+    # Unlike let you don't need to enclose the expression in quotes. 
+    # 
+    # You also MUST HAVE SPACES BETWEEN THE ITEMS OF THE EXPRESSION. 
+    # 
+    # It is also common to use (expr within command substitution) to save the output to a variable.
+
+
+    # This is the basic format. Note that there must be spaces between the items and no quotes.
+    expr 5 + 4
+
+
+    # will be PRINTED.
+    expr "5 + 4"
+
+    # will be PRINTED.
+    expr 5+4
+
+    expr 5 \* $1
+
+    expr 11 % 2
+
+
+    # This time we're using (expr within command substitution) in order to save the result to the variable a.
+    a=$( expr 10 - 3 )
+    echo $a # 7
+
+
+
+
+
+
+
+
+
+
+$(( expression ))
+# Return the result of the expression.
+
+Bare double parentheses ((...)) return 0 (true) if the value of the enclosed expression is non-zero.
+It returns 1 (false) otherwise.
+
+
+a=$(( 4 + 5 ))
+echo $a # 9
+
+a=$((3+5))
+echo $a # 8
+
+
+#  We may include variables without the preceding $ sign
+b=$(( a + 3 ))
+echo $b # 11
+
+# Variables can be included with the $ sign if you prefer.
+b=$(( $a + 4 ))
+echo $b # 12
+
+
+# This is a slightly different form. Here the value of the variable b is incremented by 1 
+# (using the same mechanism illustrated under let). 
+# When we do this we don't need the $ sign preceding the brackets.
+(( b++ ))
+echo $b # 13
+
+
+# This is a slightly different form of the previous example. 
+# Here the value of the variable b is incremented by 3. 
+# It is a shorthand for b = b + 3.
+(( b += 3 ))
+echo $b # 16
+
+
+# Unlike other methods, when we do multiplication we don't need to escape the * sign.
+a=$(( 4 * 5 ))
+echo $a # 20
+
+
+
+# So as you can see double parenthese is quite flexible in how you format it's expression. 
+# This is part of why we prefer this method. 
+# 
+# As double parentheses is builtin to Bash it also runs slighly more efficiently.
+
+
+
+
+
+    ${#var}
+    # Return the length of the variable var.
+
+    a='Hello World'
+    echo ${#a} # 11
+
+    b=4953
+    echo ${#b} # 4
+
+
+
+
+
+
+
+
+# =========================================================================================================================================
+# ===CONDITIONS=== (if )
+# =========================================================================================================================================
+
+    my_var="string"
+    if [ "$my_var" != "PEPLOBLOCK" ]
+    then
+        echo "Slava Bogy, ne PEPLOBLOCK"
+    fi
+
+
+# https://stackoverflow.com/questions/13617843/unary-operator-expected-error-in-bash-if-condition
+# if var is hollow it will lead to
+# Error: .....unary operator expected
+my_var=""
+if [ $my_var != "PEPLOBLOCK" ]
+then
+    echo "Slava Bogy, ne PEPLOBLOCK"
+fi
+# how to fix it:
+[ "$my_var" != "PEPLOBLOCK" ]
+OR
+[[ $my_var != "PEPLOBLOCK" ]]
+# also spaces must be present at brackets at both sides
+
+
+    echo 'How old are you?'
+    read age
+    if [ $age -gt 20 ]
+    then
+        echo 'You can drink.'
+    else
+        echo 'You are too young to drink.'
+    fi
+
+
+# The brackets "[...]" means that "test" command is in use to check the 
+# statement within the brackets.
+# Actually "if" thing can be used without those brackets at all.
+# Example of using "if" without "test command"/brackets
+        
+#!/usr/bin/bash
+# 
+# os-release is a file that is present in almost
+# any linux distriution. It contains os-release info
+release=/etc/os-release
+if grep -iq "BOBS" $release
+then
+    echo "aha!"
+else
+    echo "neydacha(bad luck)"
+fi
+# if "grep" finds out the word "BOBS" then the "if" is True.
+# 
+# -i is ignore  case  distinctions
+# 
+# -q is Quiet;  do  not  write  anything to standard output.
+# Exit immediately with zero status if any match is found,
+# even if an error was detected.
+
+
+
+    # If Elif Else
+
+    if [ <some test> ]; then
+
+    <commands>
+
+    elif [ <some test> ] ; then
+
+    <different commands>
+
+    else <other commands>
+
+    fi
+
+
+
+# Boolean Operations
+# 
+# Sometimes we only want to do something if multiple conditions are met. 
+# Other times we would like to perform the action if one of several condition is met.
+
+and - &&
+or  - ||
+
+
+#!/bin/bash
+
+# if the file is readable and has a size greater than zero.
+if [ -r $1 ] && [ -s $1 ]; then
+    echo This file is useful.
+fi
+
+
+
+# =========================================================================================================================================
+# ===CASE Statements===
+# =========================================================================================================================================
+
+
+
+    #!/usr/bin/bsh
+    echo 'dom         --> Dominos'
+    echo '"pj" OR "2" --> Papa Jones'
+    echo 'dd          --> DoDo'
+    echo 'ne          --> neither'
+    echo -n 'input: '
+
+    read pizza
+    case $pizza in
+        dom)
+            echo it is OK 
+            ;;
+        pj | 2)
+            echo ploh
+            echo super ploh
+            echo MEGA ploh
+            ;;
+        dd)
+            echo 'dodster<3'
+            ;;
+        ne)
+            echo 'tih-tih - PISbKA idet))'
+            ;;
+        jopa)
+            echo SECRET FOUND!!
+            ;;
+        # It is a common practice to use the wildcard asterisk
+        # symbol (*) as a final pattern to define the default case.
+        # This pattern will always match.
+        *) 
+            echo wrong input
+            ;;
+        # jopa2 option can't be reached
+        # because option (*) is above it
+        jopa2)
+            echo the GIGA secret                  
+    esac
+
+
+
+# If no pattern is matched, the return status is zero.
+# Otherwise, the return status is the exit status of the executed commands.
+
+
+
+
+
+
+# =========================================================================================================================================
+# ===LOOPS=== (for, while, until, select mechanism)
+# =========================================================================================================================================
+
+    # Bash uses (for), (while), and (until) loops.
+    # (break) and (continue) works with (FOR), (WHILE), (UNTIL) loops
+    # Bash loops also include (Select Construction)
+
+
+# (for) loop
+
+# 1:
+#!/usr/bin/bash
+files=~/Desktop/python/*
+for i in $files
+do
+  echo $(basename $i) # basename remains only file name (cuts full path)
+done
+
+# IDC:
+#!/usr/bin/bash
+numbs='vova gladkij lexa 5 4'
+for i in $numbs 
+do
+    echo $i
+done
+
+# 2: (break) statement
+#!/usr/bin/bash
+for I in 1 2 3 4 5
+do
+  statements1      #Executed for all values of ''I'', up to a disaster-condition if any.
+  statements2
+  if (disaster-condition)
+  then
+    break          #Abandon the loop.
+  fi
+  statements3      #While good and, no disaster-condition.
+done
+
+# 3: (continue) statement
+#!/usr/bin/bash
+for I in 1 2 3 4 5
+do
+  statements1      #Executed for all values of ''I'', up to a disaster-condition if any.
+  statements2
+  if (condition)
+  then
+    continue       #Go to next iteration of I in the loop and skip statements3
+  fi
+  statements3
+done
+
+# 4: arrays
+#!/usr/bin/bash
+arr=(1 2 3 5 4)
+for i in ${arr[@]} # ({}) is necessary for variables that
+                   # storing arrays for index to work 
+do
+    echo $i
+done
+
+# 5: arguments
+#!/usr/bin/bash
+for i in $@
+do
+    echo "Script arg is $i"
+done
+
+
+
+
+    # (while) loop
+    # The argument for a while loop can be any (BOOLEAN) expression.
+    # Infinite loops occur when the conditional never evaluates to false.
+
+    # 1:
+    #!/usr/bin/bash
+    myvar=1
+    while [ $myvar -le 10 ]
+    do
+        echo $myvar
+        myvar=$(($myvar + 1))
+        sleep 0.25
+    done
+
+    # 2:
+    #!/usr/bin/bash
+    file=~/test.sh
+    while [ -f $file ]
+    do
+        echo "at $(date) $(basename $file) was there"
+        sleep 5
+    done
+    echo "file $file is missing"
+
+    # 3: true (not True)
+    #!/usr/bin/bash
+    while true
+    do
+        echo ahah
+        sleep 1
+    done
+
+
+
+
+
+# (until) loop
+# 
+# The until loop is used to execute a given set of commands
+# as long as the given condition evaluates to false.
+
+#!/usr/bin/bash
+until [CONDITION]
+do
+  [COMMANDS]
+done
+
+
+
+
+
+    # (Select) mechanism
+    select <var> in <list>
+    do
+    <commands>
+    done
+    #
+    # The select mechanism allows you to create a simple menu system.
+    # 
+    # When invoked it will take all the items in list (similar to other loops this is a space separated set of items) 
+    # and present them on the screen with a number before each item. 
+    # A prompt will be printed after this allowing the user to select a number. 
+    # When they select a number and hit enter the corresponding item will be assigned to the variable var 
+    # and the commands between do and done are run. 
+    # Once finished a prompt will be displayed again so the user may select another option.
+    # 
+    # 
+    # ALSO:
+    # --No error checking is done. If the user enters something other than a number 
+    #   or a number not corresponding to an item then var becomes null (empty)
+    #
+    # --If the user hits enter without entering any data then the list of options will be displayed again.
+    #
+    # --The loop will end when an EOF signal is entered or the break statement is issued.
+    #
+    # --You may change (the system variable PS3) to change the prompt that is displayed.
+
+    #!/bin/bash
+    # A simple menu system
+    names='Kyle Cartman Stan Quit'
+
+    PS3='Select character: '
+    
+    select name in $names
+    do
+        if [ $name == 'Quit' ]; then
+            break
+        fi
+    echo Hello $name
+    done
+
+    echo Bye
+
+
+
+
+
+
+
+# =========================================================================================================================================
+# ===FUNCTIONS=== + command (command)
+# =========================================================================================================================================
+
+
+    # In other programming languages it is common to have arguments passed
+    # to the function listed inside the brackets ().
+    # In Bash they are there only for decoration and
+    # you never put anything inside them.
+
+    myfunc() {              # Or myfunc ()
+        echo "Vlad"
+        echo "Stas"
+    }
+    # OR
+    function myfunc {
+        <commands>
+    }
+
+# We may send data to the function in a similar way to
+# passing command line arguments to a script.
+# 
+# We supply the arguments directly after the function name.
+# !WITHIN! the function they are accessible as $1, $2, etc.
+
+function myfunc {
+    echo 'Hello\\'${1}'//!'
+}
+myfunc sfjosnf
+
+$ ~/test.sh
+Hello\\sfjosnf//!
+
+    
+    # (return) statement in bash is simular to (exit) statement
+    # except it doesn't stop a script.
+
+    #!/bin/bash
+    # Setting a return status for a function
+    print_something () {
+        echo Hello $1
+        return 5
+    }
+    print_something Mars
+    print_something Jupiter
+    echo The previous function has a return value of $?
+
+    $ ~/test.sh
+    Hello Mars
+    Hello Jupiter
+    The previous function has a return value of 5
+
+
+
+# Make function return a value
+
+#!/bin/bash
+given_file=$1
+
+lines_in_file () {
+cat $1 | wc -l          # Simply count lines in given file
+}                       # !!! $1 is a LOCAL variable of function !!!
+
+num_lines=$( lines_in_file $given_file ) # Store result of function execution
+                                         # in variable.
+                                         # It just simulate Python's
+                                         # (return) statement
+echo The file $1 has $num_lines lines in it.
+
+
+
+
+
+
+    # Wrapping OR Overriding commands
+
+    # It is possible to name a function as the same name as a command 
+    # you would normally use on the command line. 
+    # This allows us to create a wrapper.
+    # 
+    # Maybe every time we call the command ls in our script, 
+    # what we actually want is (ls -lh). We could do the following:
+
+    #!/bin/bash
+    # Create a wrapper around the command ls
+    ls () {
+    command ls -lh
+    }
+
+    # In the example above, if we didn't put the keyword (command) 
+    # in front of (ls -lh) we would end up in an endless loop. 
+    # 
+    # Even though we are inside the function (ls) when we call (ls) 
+    # it would have called another instance of the function (ls)
+    # which in turn would have done the same and so on.
+
+
+
+
+
+# (command)
+# 
+# (command) use is to ignore aliases and functions, and run the executable file 
+# found in PATH, even when an alias or a function with the same name exists.
+# 
+# Command (command) is needed to change the way of how Bash is looking for
+# any inputted commands.
+#
+# Without the (command) Bash firstly will look for the commands 
+# in (.bashrc) and (.bash_aliases) , if a given command is not there then Bash
+# will be looking in ($PATH).
+# 
+# https://askubuntu.com/questions/512770/what-is-the-bash-command-command
+# (command) is a bash builtin
+# 
+# Essentially you would use command to bypass "normal function lookup". 
+# For example, say you had a function in your .bashrc:
+
+function say_hello() {
+   echo 'Hello!'
+}
+
+# Normally, when you run (say_hello) in your terminal bash would find 
+# the function named (say_hello) in your .bashrc 
+# before it found, say, an (application named say_hello). Using:
+command say_hello  
+# makes bash bypass its normal function lookup and 
+# go straight to either builtins or your $PATH. 
+# 
+# Note that this function lookup also include aliases. 
+# Using (command) will bypass both functions and aliases.
+
+
+
+
+
+
+
+
+
+# =========================================================================================================================================
+# ===Arrays===
+# =========================================================================================================================================
+
+    # An array in bash is defined inside parentheses.
+    # There are no commas(,) between the items of the array.
+
+
+#!/usr/bin/bash
+beatles=('John' 'Paul' 'George' 'Ringo')
+# To access an item from an array, you'll use square brackets ([]).
+# Arrays are 0-indexed in bash.
+# It is also necessary to use the paramter expansion syntax.
+case $1 in
+    1)
+        echo ${beatles[3]}
+        ;;
+    2)
+        echo $beatles[3] # is wrong
+esac
+
+$ ~/test.sh 1
+Ringo
+$ ~/test.sh 2
+John[3]
+
+
+
+
+
+    # {arr[*]} == {arr[@]}
+
+    arr=()          # Create an empty array
+    arr=(1 2 3)     # Initialize array
+    ${arr[2]}       # Retrieve third element
+
+    ${arr[@]}       # Retrieve all elements
+    ${!arr[@]}      # Retrieve all array indices
+    ${#arr[@]}      # Calculate array size
+    ${#arr[2]}      # Lengh of the third value in array
+
+    arr[0]=3        # Overwrite 1st element
+    arr+=(4)        # Append value(s)
+    str=$(ls)       # Save ls output as a string
+    arr=( $(ls) )   # Save ls output as an array of files
+    ${arr[@]:s:n}   # Retrieve n elements starting at index s
+
+
+    echo ${arr[0]} ${arr[1]}
+
+
+
+    #!/usr/bin/bash
+    arr=(one two three [5]=six)
+    echo ${!arr[*]}
+    echo ${arr[@]}
+
+    $ ~/test.sh
+    0 1 2 5
+    one two three six
+
+
+# =========================================================================================================================================
+# ===Data Streams===
+# =========================================================================================================================================
+
+    # file handlers / file descriptors for STDIO (standart input, output) are
+    # 0 for STDIN
+    # 1 for STDOUT
+    # 2 for STDERR
+    # 
+    # === SYNTAX: ===
+    # 
+    # for STDIN
+            cat < datafile.txt
+    #       cat <0 datafile.txt     # WON'T WORK
+    # 
+    # for STDOUT
+            ls -al / > output.txt   #(create file/rewrite file)
+            ls -al / >> output.txt  #(create file/append to file) 
+            # OR
+            ls -al / 1> output.txt
+            ls -al / 1>> output.txt
+    # 
+    # for STDERR
+            ls -al / 2> output.txt
+            ls -al / 2>> output.txt
+    # 
+    # for both STDOUT and STDERR
+            ls -al /etc &> output.txt   #redirect both STDOUT, STDERR to a file
+            ls lala 1> output 2>&1      #same
+            ls -al /etc &>> output.txt  #same + append
+
+
+    #       ls lala 2>&1 > output
+            # Это не будет работать, потому что когда интерпретатор прочитает 2>&1, он еще не будет знать, 
+            # куда перенаправлен стандартный поток вывода. 
+            # Поэтому потоки ошибок и вывода не будут объединены.
+
+
+
+
+
+# A string of programs connected with pipes is called a PIPELINE, 
+# and the programs that use STDIO are referred to officially as filters, but I prefer the term “transformers.”
+# 
+# 
+# 
+# how to carry STDERR through PIPE along with STDOUT:
+cat file.txt 2>&1 | grep "bimbo bangings"
+# OR
+cat file.txt |& grep "bimbo bangings"
+# 
+# 
+# (|&) is just like the pipe operator (|), but piping both standard output and standard error.
+#
+# 
+# (>&) is FILE DESCRIPTOR redirection symbol the (&) points INTO a Data Stream we want to redirect.  
+# 
+# 
+# 
+# 
+# carry only STDERR trough PIPE:
+# 
+# First redirect stderr to stdout — the pipe; 
+# then redirect stdout to /dev/null (without changing where stderr is going):
+# 
+cat file.txt 2>&1 >/dev/null | grep "bimbo bangings" 
+# 
+# Note that the sequence of I/O redirections is interpreted left-to-right, 
+# but pipes are set up before the I/O redirections are interpreted.
+# 
+# 
+# 
+# to swap the output from standard error and standard output over, use:
+# 
+$ ls /etc 3>&1 1>&2 2>&3
+# 
+# This creates a new File Descriptor (3) and assigns it to the same place as 1 (standard output), 
+# then assigns FD 1 (standard output) to the same place as FD 2 (standard error) 
+# and finally assigns FD 2 (standard error) to the same place as FD 3 (standard output).
+
+
+
+
+    # (<<) and (<0) are not exist, only (<) is. 
+    # 
+    # Redirection ( > ; >> ; < ) can then be used at the end of the pipeline ( | ) to direct the data stream 
+    # to a file[1].
+    # 
+    # As mentioned, that file[1] could be an actual data file on the hard drive, or a DEVICE FILE such as a DRIVE PARTITION, 
+    # A PRINTER, A TERMINAL, A PSEUDO-TERMINAL, OR ANY OTHER DEVICE CONNECTED TO A COMPUTER.
+
+
+
+# The ability to manipulate these data streams using these small yet powerful transformer programs 
+# is central to the power of the Linux command-line interface. 
+# 
+# Many of the core utilities are transformer programs and use STDIO.
+
+
+
+    # In the Unix and Linux worlds, a stream is a flow of text data that originates at some source;
+    # 
+    # the stream may flow to one or more programs that transform it in some way, and then it may be stored in 
+    # a file or displayed in a terminal session. 
+
+
+
+# There are three STDIO data streams, each of which is automatically opened as a file at the startup of a program 
+# — well, ONLY THOSE PROGRAMS THAT USE STDIO.
+# 
+# STDIN, File handle 0, is standard input which is usually input from the keyboard. STDIN can be redirected from any file, including device files, instead of the keyboard. It is not common to need to redirect STDIN, but it can be done.
+# 
+# STDOUT, File handle 1, is standard output which sends the data stream to the display by default. It is common to redirect STDOUT to a file or to pipe it to another program for further processing.
+# 
+# STDERR, File handle 2. The data stream for STDERR is also usually sent to the display.
+
+
+
+    # |& operator
+    # 
+    # The |& operator can be used to pipe the STDERR along with STDOUT to STDIN of the next command. 
+    # This is not always desirable, but it does offer flexibility in the ability to record the STDERR data stream 
+    # for the purposes of problem determination.
+
+
+
+$ touch /root/newfile 2> /dev/null
+# /dev/null, or the BIT BUCKET, is used AS A GARBAGE CAN for the command line
+
+
+
+
+# =========================================================================================================================================
+Processes ; Foreground and Background run
+# =========================================================================================================================================
+
+    $ sleep 10 &
+    [1] 8199
+    $ ps
+     PID TTY          TIME CMD
+    8189 pts/1    00:00:00 bash
+    8199 pts/1    00:00:00 sleep
+    8201 pts/1    00:00:00 ps
+
+    # (&) means run this command in the background.
+
+
+# --Every process you run is assigned a process ID which everyone refers to as a pid. 
+#
+# --Every process is also owned by a user. 
+#   Some processes will always be owned by root, others by whatever user you are, and others still.
+
+
+    # ===Foreground and Background===
+    #
+    # A process can either run in the foreground or the background. 
+    #
+    #     --If something is running in the foreground, you'll see all the output and you will wait until it's finished. 
+    #
+    #     --If it's running in the background, you can still see the output (unless you redirect it) 
+    #       but you can start doing other things.
+
+
+
+# Do be aware that if you close your terminal however that it will kill all your running jobs. 
+
+
+
+
+# =========================================================================================================================================
+# === Parentheses ( ), Braces { }, Brackets [ ], etc ===
+# =========================================================================================================================================
+
+Definitions in English language:
+
+1--Round   brackets (  ) 
+2--Curly   brackets {  } 
+3--Square  brackets [  ] 
+
+1--Parentheses      (  ) is the proper term for round brackets.
+
+2--Braces           {  } is the proper term for curly brackets.
+
+3--Square           [  ] brackets are simply called brackets.
+
+# A tiny note on all of these is that Bash generally likes to see A SPACE BETWEEN ROUND OR SQUARE BRACKETS 
+# and whatever's inside. 
+# It DOESN'T LIKE SPACE WHERE CURLY BRACES are concerned.
+
+
+
+
+
+#!/usr/bin/bash
+
+(  )
+((  ))
+<(  )
+
+$(  )
+$((  ))
+
+[ ]
+[[ ]]
+
+{  }
+${  }
+
+
+cat <<HEREDOC
+miltiple
+string
+text
+HEREDOC
+
+cat <<<singlestring
+
+
+
+
+# A tiny note on all of these is that Bash generally likes to see a space between 
+# round (  )
+# or 
+# square  [ ]
+# brackets and whatever's inside. 
+# 
+# It doesn't like space where
+# curly braces {  }
+# are concerned.
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ ( Single Parentheses ) 
+
+
+    ( command1; command2 )             Command group executed within a subshell  
+    Array=(element1 element2 element3) Array initialization  
+    >(COMMAND)                         Process substitution  
+    <(COMMAND)                         Process substitution 
+
+
+
+
+# Single parenthesis will run the commands inside in a SUBSHELL. 
+# This means that they run through all of the commands inside, and then 
+# RETURN A SINGLE EXIT CODE. 
+# 
+# Any variables declared or environment changes will get cleaned up and disappeared. 
+# (except you will use the (export) command)
+# 
+# Because it's within a subshell, if you have it inside a loop, 
+# it will run a little slower than if you called the commands without the parentheses.
+
+
+
+
+    a='This string'
+    ( a=banana; mkdir $a )
+    echo $a
+    # => 'This string'
+    ls
+    # => ...
+    # => banana/
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ (( Double Parentheses )) 
+
+
+    (( var = 78 ))            Integer arithmetic   
+    (( var++ ))               C-style variable increment   
+    (( var-- ))               C-style variable decrement   
+    (( var0 = var1<98?9:21 )) C-style ternary operation
+
+
+
+# This is for use in INTEGER ARITHMETIC. 
+# You can perform assignments, logical operations, and mathematic operations 
+# like multiplication or modulo inside these parentheses. 
+# 
+# However, do note that there is NO OUTPUT (only exit code). 
+
+
+
+    # ANY VARIABLE CHANGES THAT HAPPEN INSIDE THEM WILL STICK, 
+    # but don't expect to be able to assign the result to anything. 
+    # 
+    # You can't use it in an expression
+    a=(( 4 + 1 ))
+    # => bash: syntax error near unexpected token '('
+
+
+    (( result = 5 + 10 * 2 ))
+    echo $result
+    # => 25
+
+
+
+
+# If the result inside is non-zero, it returns a zero (success) exit code. 
+# If the result inside is zero, it returns an exit code of 1.
+num=8
+(( num > 5 && num < 10 )) # (&&) -- logical AND
+echo $?
+# => 0
+
+
+
+
+    i=4
+    (( i += 3 ))
+    echo $i
+    # => 7
+
+
+    (( 4 + 8 ))
+    # => No Output
+    echo $?  # Check the exit code of the last command
+    # => 0
+
+
+    (( 5 - 5 ))
+    echo $?
+    # => 1
+
+
+    # Strings inside get considered 'zero'.
+    (( i += POO ))
+    echo $i
+    # => 7
+
+
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ <( Angle Parentheses ) 
+
+
+
+    <( ANY_COMMAND )
+
+    # Basically, run command in a subshell, then return it's output through a file-descriptor. 
+    # Meaning that you can do things like:
+    # - diff two streams (???)
+    # - run a command within a shell to create an input-"file" for 
+    #   other commands that want input in the form of a file rather than a stream.
+
+
+
+VAR=($( ANY_COMMAND )) # --It takes the output from ANY_COMMAND and creates an array-variable from it.
+
+
+
+    # This is known as a process substitution. 
+    # It's a lot like a pipe, except you can use it anywhere a command expects a file argument. 
+    # And you can use multiple at once!
+
+    $ sort -nr -k 5 <( ls -l /bin ) <( ls -l /usr/bin ) <( ls -l /sbin )
+
+    # This works because the sort command expects one or many filenames as arguments. 
+    # 
+    # Behind the scenes, the <( stuff ) actually outputs the name of a temporary file (unnamed pipe file) 
+    # for the sort command to use.
+
+ 
+
+
+# Another example of where this comes in handy is the use of the (comm) command, 
+# which spits out the lines that the files have in common. 
+# 
+# Because comm needs its input files to be sorted, you could either do this:
+
+# The lame way
+sort file1 > file1.sorted
+sort file2 > file2.sorted
+comm -12 file1.sorted file2.sorted
+
+# Ooooor, you can be a total BAshMF and do it this way:
+# The baller way
+comm -12 <( sort file1 ) <( sort file2 )
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ $( Dollar Single Parentheses ) 
+
+
+    result=$(COMMAND)    # Command substitution, new style  
+
+
+# This is for interpolating a subshell command output into a string. 
+# The command inside gets run inside a subshell, and then any output gets placed into whatever string you're building.
+
+intro="My name is $( whoami )"
+echo $intro
+# => My name is ryan
+
+# And just to prove that it's a subshell...
+a=5
+b=$( a=1000; echo $a )
+echo $b
+# => 1000
+echo $a
+# => 5
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ $( Dollar Single Parentheses Dollar Q )$? 
+
+
+
+# If you want to interpolate a command, but only the exit code and not the value, this is what you use.
+
+( grep -q PATTERN FILE )$?
+
+$ echo $( grep -q string ~/my_dir/0_e.txt )$?
+# => 0
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ $(( Dollar Double Parentheses ))
+
+
+
+
+
+    # Remember how regular (( Double Parentheses )) don't output anything? 
+    # Remember how that is kind of annoying? 
+    # 
+    # Well, you can use $(( Dollar Double Parentheses )) to perform an Arithmetic Interpolation, 
+    # which is just a fancy way of saying, "Place the output result into this string."
+
+
+
+
+a=$(( 16 + 2 ))
+message="I don't want to brag, but I have like $(( a / 2 )) friends."
+echo $message
+# => I don't want to brag, but I have like 9 friends."
+
+
+
+
+    # You can even do assignments.  The last value calculated will be the output.
+    b=$(( a *= 2 ))
+    echo $b
+    # => 36
+    echo $a
+    # => 36
+
+
+
+
+# One thing to remember is that this is strictly integer arithmetic. 
+# No decimals. 
+# Look into (bc) for floating point calculations.
+
+echo $(( 9 / 2 ))  # You might expect 4.5
+# => 4
+
+echo $(( 9 / 2.5 ))
+# => bash: 9 / 2.5 : syntax error: invalid arithmetic operator (error token is ".5 ")
+
+
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ [ Single Square Brackets ]
+
+
+    if [ CONDITION ]    Test construct  
+    if [[ CONDITION ]]  Extended test construct  
+    Array[1]=element1   Array initialization  
+    [a-z]               Range of characters within a Regular Expression
+    $[ expression ]     A non-standard & obsolete version of $(( expression )) [1]
+
+
+
+# This is an alternate version of the built-in (test). 
+# The commands inside are run and checked for "truthiness." 
+# 
+# Strings of zero length are false. 
+# Strings of length one or more (even if those characters are whitespace) are true.
+
+
+if [ -f my_friends.txt ]
+then
+    echo "I'm so loved!"
+else
+    echo "I'm so alone."
+fi
+
+
+    # One last thing that's important to note is that (test and [) are actually shell commands. 
+    # 
+    # [[ ]] is actually part of the shell language itself. 
+    # What this means is that the stuff inside of Double Square Brackets isn't treated like arguments. 
+    # 
+    # The reason you would use Single Square Brackets is if you need to do word splitting or filename expansion.
+
+
+
+# Here's an illustration of the difference. 
+# 
+# Let's say you used Double Square Brackets in the following way.
+
+
+$ [[ -f *.txt ]]
+$ echo $?
+# => 1
+# 
+# False, there is no file explicitly named "[asterisk].txt". 
+
+
+# Let's assume there are currently no .txt files in our directory.
+# 
+# If there's no files .txt files:
+$ [ -f *.txt ]; echo $?
+# => 1
+# 
+# *.txt gets expanded to a blank string, which is not a file, and then the test gets evaluated. 
+
+
+# Let's create a txt file.
+# 
+$ touch cool_beans.txt
+# Now there's exactly one .txt file
+# 
+$ [ -f *.txt ]; echo $?
+# => 0
+# 
+# *.txt gets expanded to a space-separated list of matching filenames: "cool_beans.txt", 
+# and then the test gets evaluated with that one argument. Since the file exists, the test passes. 
+
+
+# But what if there's two files?
+# 
+$ touch i_smell_trouble.txt 
+# Now there's two files
+# 
+$ [ -f *.txt ]
+# => bash: [: too many arguments.
+# 
+# *.txt gets expanded to "cool_beans.txt i_smell_trouble.txt", and then the test is evaluated. 
+# 
+# Bash counts each of the filenames as an argument, 
+# receives 3 arguments instead of the two it was expecting, and blurffs.
+
+
+# Just to hammer my point home: even though there are currently two .txt files, this next test still fails.
+[[ -f *.txt ]]; echo $?
+# => 1.  There is still no file called *.txt
+
+
+
+
+    # I tried to come up with some examples of why you would want this, but I couldn't come up with realistic ones.
+    # 
+    # For the most part, it seems like, a good rule of thumb is: 
+    # if you need to use test or [ ], you'll know it. 
+    # 
+    # If you're not sure if you need it, you probably don't need it 
+    # and you should probably use [[ double square brackets ]] to avoid 
+    # a lot of the tricky gotchas of the test command. 
+    # If your shell is modern enough to have them.
+
+
+
+
+#!/bin/bash
+# 
+# if the file is readable and has a size greater than zero.
+# 
+if [ -r $1 ] && [ -s $1 ]; then
+    echo This file is useful.
+fi
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ [[ Double Square Brackets ]]
+
+
+# The double bracket ([[), which is a shell keyword, enables additional functionality. 
+# 
+# For example, you can use && and || instead of -a and -o 
+# and there's a regular expression matching operator =~.
+# 
+# 
+# True/false testing. Read through the section above for an explanation 
+# of the differences between single and double square brackets. 
+
+# Additionally, double square brackets support extended regular expression matching. 
+# Use quotes around the second argument to force a raw match instead of a regex match.
+
+
+
+    pie=good
+    [[ $pie =~ d ]]; echo $?
+    # => 0, it matches the regex!
+
+    [[ $pie =~ [aeiou]d ]]; echo $?
+    # => 0, still matches
+
+    [[ $pie =~ [aei]d ]]; echo $?
+    # => 1, no match
+
+    [[ $pie =~ "[aeiou]d" ]]; echo $?
+    # => 1, no match because there's no literal '[aeoiu]d' inside the word "good"
+
+
+    # Also, inside double square brackets, < and > sort by your locale.
+    # Inside single square brackets, it's by your machine's sorting order, which is usually ASCII.
+
+
+
+
+$ [[ 30 -gt 0 || 30 -lt 100 ]] 
+$ echo $?
+# => 0
+
+$ [[ 30 -gt 0 && 110 -lt 100 ]] 
+$ echo $?
+#  => 1
+
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ { Single Curly Braces }
+
+
+
+    { command1; command2; . . . commandN; } Block of code  
+    {string1,string2,string3,...}           Brace expansion  
+    {a..z}                                  Extended brace expansion  
+    {}                                      Text replacement, after find and xargs
+
+
+
+
+# Single curly braces are used for expansion.
+
+
+echo h{a,e,i,o,u}p
+# => hap hep hip hop hup
+
+echo "I am "{cool,great,awesome}
+# => I am cool I am great I am awesome
+
+
+mv friends.txt{,.bak}
+# => braces are expanded first, so the command is `mv friends.txt friends.txt.bak`
+
+
+
+
+    # The cool thing is that you can make ranges as well! With leading zeros!
+
+    echo {01..10}
+    01 02 03 04 05 06 07 08 09 10
+
+    echo {01..10..3}
+    01 04 07 10
+
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ ${dollar braces}
+
+
+    ${variable}     Parameter substitution  
+    ${!variable}    Indirect variable reference  
+
+
+
+${arr[@]}
+
+
+
+    # Note that there are NO SPACES AROUND THE CONTENTS. 
+    # 
+    # This is for variable interpolation. 
+    # You use it when normal string interpolation could get weird
+
+    # I want to say 'bananaification'
+    fruit=banana
+    echo $fruitification
+    # => "" No output, because $fruitification is not a variable.
+
+    echo ${fruit}ification
+    # => bananaification
+
+
+
+
+
+# The other thing you can use ${Dollar Braces} for is variable manipulation. 
+# 
+# Here are a few common uses.
+
+
+# Using a default value if the variable isn't defined.
+
+function hello() {
+  echo "Hello, ${1:-World}!"
+}
+hello Ryan
+# => Hello Ryan!
+hello
+# => Hello World!
+
+
+function sign_in() {
+    name=$1
+  echo "Signing in as ${name:-$( whoami )}"
+}
+sign_in
+# => Signing in as ryan
+sign_in coolguy
+# => Signing in as coolguy
+
+
+
+
+
+# Getting the length of a variable.
+
+name="Ryan"
+echo "Your name is ${#name} letters long!"
+# => Your name is 4 letters long!
+
+
+
+
+# Chopping off pieces that match a pattern.
+
+url=https://assertnotmagic.com/about
+echo ${url#*/}     # Remove from the front, matching the pattern */, non-greedy
+# => /assertnotmagic.com/about
+
+echo ${url##*/}    # Same, but greedy
+# => about
+
+echo ${url%/*}     # Remove from the back, matching the pattern /*, non-greedy
+# => https://assertnotmagic.com
+
+echo ${url%%/*}    # Same, but greedy
+# => https:
+
+echo ${url^^a}     # You can uppercase matching letters!
+# => https://AssertnotmAgic.com/About
+
+
+
+# You can get slices of strings.
+
+echo ${url:2:5}  # the pattern is ${var:start:len}.  Start is zero-based.
+# => tps://
+
+
+
+# You can replace patterns.
+
+echo ${url/https/ftp}
+# => ftp://assertnotmagic.com
+
+
+# Use a double slash for the first slash to do a global replace
+echo ${url//[aeiou]/X}
+# => https://XssXrtnXtmXgXc.cXm
+
+
+
+
+
+# And, you can use variables indirectly as the name of other variables.
+
+function grades() {
+  name=$1
+  alice=A
+  beth=B
+  charles=C
+  doofus=D
+  echo ${!name}
+}
+
+grades alice
+# => A
+
+grades doofus
+# => D
+
+grades "Valoth the Unforgiving"
+# => bash: : bad substitution.   
+# 
+# There is no variable called Valoth the Unforgiving,
+# so it defaults to a blank value.  
+# Then, bash looks for a variable with a name of "" and errors out.
+
+
+
+
+
+
+
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++ <<Double Angle Heredocs
+
+
+    # HEREDOCs when used with a command are fed into stdin for a command. 
+    # 
+    # 
+    #
+    # Two arrows and then a word - any word that you choose - to signal the start of the string. 
+    # 
+    # The string doesn't end until you repeat your magic word.
+
+
+
+# This is how you make multiline strings in Bash (one method). 
+
+read -r -d '' nice_message <<MESSAGE
+Hi there!  I really like the way you look
+when you are teaching newbies things
+with empathy and compassion!
+You rock!
+MESSAGE
+
+echo "$nice_message"
+# => Hi there!  I really like the way you look
+# => when you are teaching newbies things
+# => with empathy and compassion!
+# => You rock!
+
+
+# Note, if you store a string with newlines in a variable, 
+# you have to quote it to get the newlines to actually print.
+# If you just use `echo $nice_message`, it won't reflect newlines.
+# 
+# The word can be whatever you want. 
+# I generally end up using "HEREDOC" to make it easier for future me.
+
+
+
+
+
+
+
+
+
+
+$ cat <<MESSAGE 
+Hi there!  I really like the way you look
+when you are teaching newbies things
+with empathy and compassion!
+You rock!
+MESSAGE
+# = > Hi there!  I really like the way you look
+# = > when you are teaching newbies things
+# = > with empathy and compassion!
+# = > You rock!
+
+
+
+$ cat <<EOF 
+$RANDOM 
+EOF
+# => 4578 
+
+
+$ cat <<EOF 
+$RANDOM 
+more
+and 
+more 2
+EOF
+# => 19827 
+# => more
+# => and
+# => more 2
+
+
+
+
+# If you put single quotes around the initial tag, 
+# the HEREDOC will be treated like a single-quoted string, leaving variable expressions uninterpolated.
+
+
+$ cat <<'EOF' 
+$RANDOM 
+EOF
+# => $RANDOM
+
+
+
+
+
+
+
+    # You can also use triple less-than symbols without a tag to just feed in a single simple string, like so: 
+
+    $ cat <<<beep   # It must be one liner 
+    # => beep
+
+    $ cat <<<'single string'
+    # => single string
+
+
+
+
+
+
+
+# One final trick is that, if you add a dash after the arrows, 
+# it suppresses any leading tabs (but not spaces) in your heredoc.
+
+cat <<-HEREDOC
+        two leading tabs
+    one leading tab
+  two spaces here
+HEREDOC
+
+# => two leading tabs
+# => one leading tab
+# =>   two spaces here
+
+
+
+
+
+# =========================================================================================================================================
+Wildcards and Replacements in Bash
+# =========================================================================================================================================
+
+
+# Wildcard --a playing card that can have any value, suit, colour, or other property in a game at the discretion of the 
+# player holding it.
+
+# Wildcard in computing --a character that will match any character or sequence of characters in a search.
+
+
+
+(*) represents set of any characters
+
+(?) represents exactly one character
+# So file?.txt won't match file10.txt
+
+
+# =========================================================================================================================================
+~/.bashrc and ~/.bash_profile
+# =========================================================================================================================================
+
+# ~/.bash_profile is only run on login shells. 
+# That is to say, it's only run once for each time you log in to your computer. It is not run after that. 
+#
+# ~/.bashrc is run on every nonlogin shell, so it's run on every tab of bash you start up. 
+#
+#
+# Typically what you want is to run your customizations on every shell so 
+# you actually just want to modify ~/.bashrc and leave ~/.bash_profile alone. 
+
+
+
+# =========================================================================================================================================
+# ===Arguments===
+# =========================================================================================================================================
+
+    # The variable "$@" is an array of all the input parameters
+    # The "$#" variable returns the input size
+
+    #!/usr/bin/bash
+    echo "$1 first arg"
+    echo "$3 third"
+    echo "$2 second"
+    echo "$@ - is the array of passed args"
+    echo "$# - is the amount of passed args"
+
+    $ ~/test.sh Aleksandr Reva \"Chika\"
+    Aleksandr first arg
+    "Chika" third
+    Reva second
+    Aleksandr Reva "Chika" - is the array of passed args
+    3 - is the amount of passed args
+
+
+
+# Using flags is a common way of passing input to a script.
+# When passing input to the script, there’s a flag (usually a single letter)
+# starting with a hyphen (-) before each argument.
+# 
+# Let’s take a look at the myscript.sh script, which takes
+# three arguments: username (-u), age (-a), and full name (-f).
+# 
+# The "getopts" function reads the flags in the input,
+# and "OPTARG" refers to the corresponding values:
+
+#!/usr/bin/bash
+while getopts q:u:a:f: myvar
+do
+    case "${myvar}"
+    in
+        q) TURN_ON_SOMETHING="TRUE"
+        u) username=${OPTARG};;
+        a) age=${OPTARG};;
+        f) fullname=${OPTARG};;
+    esac
+done
+echo "Username: $username";
+echo "Age: $age";
+echo "Full Name: $fullname";
+
+$ ~/myscript.sh -f 'John Smith' -a 25 -u john
+Username : john
+Age: 25
+Full Name: John Smith
+
+
+    # Shift operator in bash shifts the position of the command line arguments.
+    # Syntactically: shift n, where n is the number of positions to move.
+    # The default value for n is 1 if not specified.
+
+    $ ~/myscript.sh 13 18 27 35 44 52 61 79 93
+    # $1 refers to the first argument, which is 13. Using "shift 1" causes
+    # the indexing to start from the second argument.
+    # That is, $1 now refers to the second argument (18).
+    # Similarly, calling "shift 2" will then cause the indexing to start from
+    # the fourth argument (35).
+
+    #!/usr/bin/bash
+    i=1;
+    while [ $i -le $# ] 
+    do
+        echo "Username - $i: $1";
+        i=$((i + 1));
+        shift 1;
+    done
+
+    $ ~/myscript.sh john matt bill 'joe wicks' carol
+    Username - 1: john
+    Username - 2: matt
+    Username - 3: bill
+    Username - 4: joe wicks
+    Username - 5: carol
+
+
+# https://www.baeldung.com/linux/use-command-line-arguments-in-bash-script
+# SUMMARY:
+# 
+# --Positional parameters can be used when the input size is fixed and the
+# order of the arguments in the input is known.
+# 
+# --With flags, the order of the arguments in the input doesn’t matter.
+# 
+# --Loop construct comes in handy when the input size is unknown.
+# 
+# --Shift operator causes indexing to start from the argument at the
+# shifted position.
+# 
+# --The variable $@ returns the array of input parameters, and $# returns the
+# size of the input array.
+
+
+# =========================================================================================================================================
+# ===EXIT CODES===
+# =========================================================================================================================================
+
+    # $? -- is a useful variable that contains the exit code of the LAST command
+    # if $? is 0 that means program executed without any errors
+    # if it's 1 or any number greater than 0 that means there was an error
+
+#!/bin/bash
+touch /root/test
+echo created file
+echo $?
+
+$ ~/myscript.sh
+0
+# This bash script will fail to create file named "test" in root directory
+# but it will return exit code 0, because the LAST command in the script
+# was executed succesfuly.
+
+
+    # This is a proper use of exit codes in a bash scripts.
+    # 
+    # The "exit" command creates your own exit code and then stop the script
+    # with that given exit code.
+    # (the "exit" command argument takes an integer number from 0 to 255)
+
+    #!/bin/bash
+    touch /root/test
+    if [ $? -eq 0 ]
+    then
+      echo "Successfully created file"
+      exit 0
+    else
+      echo "Could not create file" >&2
+      exit 1
+    fi
+
+
+
+
+
+
+
+# =========================================================================================================================================
+
+# =========================================================================================================================================
+
+# python3 -V
+# python3 ./pog.py
+
+
+

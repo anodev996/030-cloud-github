@@ -1,0 +1,830 @@
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                Python source code file "types"
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Scripting languages are usually interpreted at runtime rather than compiled.
+
+(for import;        | (contains executable code) | (contains executable code)
+contains functions, |                            |
+etc)                |                            |
+------------------------------------------------------------------------------------------------
+module              | script                     | entry-point script
+                    |                            |
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+            How to execute Python3 (code as much as I know for now)
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Python code execution:
+- from OS's CLI
+    1 указать ABSOLUTE PATH до программы ..../bin/Python + аргумент AnyPyCode.py
+    2 просто набрать Python в консоли (благодаря PATH) + [1]
+    3 просто имя файла в консоль
+        3.1 файлу нужно право на исполнение
+        3.2 в исходном коде прописать SheBang(HashBang) - это код для загрузчика программ OS
+            
+            абсолютный путь до(вызов) env + аргумент python3
+            #!/usr/bin/env python3      # (либо просто Python, если скрипт совместим с Python2 и Python3)
+            этот HashBang более универсален (для разных дистрибутивов Linux), 
+            тк дрочим команду env чтобы она нашла python
+            
+            абсолютный путь до(вызов) исполняемого файла python
+            #!/usr/bin/python
+            #!/usr/bin/python2
+            #!/usr/bin/python3
+
+            
+- write code directly in Python interpreter (REPL)
+    >>>print('hello')
+    >>>...
+- run code in REPL by importing it
+    >>> import hello
+    Hello World!
+    >>> import importlib
+    >>> importlib.reload(hello)
+    Hello World!
+- IDEs
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                running Python3 in Bash with -m flag
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Running Modules With the -m Option
+
+The python command has a series of command-line options that can be useful in specific situations. 
+For example, if you want to run a Python module, then you can use the command python -m <module-name>. 
+The -m option searches Python’s module search path, sys.path, for the module name and runs its content:
+
+$ python -m hello
+Hello, World!
+
+
+In this example, you run the hello.py file as a module. 
+This is possible because Python automatically adds the current directory to its sys.path list. 
+Note that the module-name argument needs to be the name of a module object, not a file name. 
+In other words, you don’t include the .py suffix.
+
+
+
+Note: Using the -m option is common practice when you need 
+      to use the command-line interface (CLI) of standard-library modules, 
+      such as pip, venv, http.server, and zipfile.
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                    Linux FHS - Filesystem Hierarchy Standard
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+    /bin -- binaries. The most basic binaries(programs/applications). A new installed program is typically not in this folder.
+
+    /sbin -- system binaries. A system administrator would use them. And a standart user wouldn't have access to it without permssion. 
+             A new installed program is typically not in this folder. 
+
+
+/boot -- stores anything your OS needs to boot. Boot loaders live here.
+
+/cdrom -- It's more of a legacy mounting point for your cd-rom.
+
+/dev -- devices. This is there devices live. Because in Linux everything is a file. Here you'll find your HARDWARE e.g. hdd(/dev/sdb). 
+        This is typically an area that applications and drivers will access. 
+
+/etc -- et cetera (allso called "etsy"). This folder is there all your configurations are stored. SYSTEM-WIDE configurations.
+
+/home -- in the /home folder each user has its own directory. /home/<username> is where you store your personal files and documents.
+         Each user has its own folder and each user can only access their own, UNLESS they use admin permissions.
+
+         Some users mount the /home/<username> folder on a different drive or different partition, which allows you to reinstall 
+         the system and preserve your files.
+
+         The /home/<username> folder also contains many different directories which store your applications settings. 
+
+         Hidden directories in /home/<username> store things like Cache.
+         /home/<username/.config and /home/<username/.local which INDIVIDUAL APPLICATION SETTINGS.
+
+
+
+
+  { /lib -- these are where the libraries are stored. Libraries are file that applications can use to perform various functions.
+    /lib32
+    /lib64  }
+    
+
+/libx32
+
+/lost+found
+
+
+  { /media  -- these directories are where you would find your other mounted drives (USB stick/external hard drive/second hard 
+               drive/network drive). 
+               Most distributives will automatically mount devices for you in the /media directory. 
+               If you're mounting things manually use the /mnt directory.
+    /mnt -- mount }
+
+
+/opt -- optional. Usually there are SOFTWARE MANUALLY INSTALLED BY VENDOR. 
+        This is also where you can install software you've created yourself.
+
+/proc -- processes. There are pseudo files that contain information about system processes and resources. 
+         Every process will have a directory here which contains all kinds of information on that process. 
+         PID(process ID) of the processes in SYSTEM MONITOR corresponds with number of the directory in /proc.
+
+/root -- root users home folder. The location of this folder ensures that root always have access to its home folder in case you have your 
+         regular users /home directory stored on another drive which you cannot access.
+
+/run -- It's a "tempfs" file system which means it runs in the RAM. This also means that everything in it is gone when the system 
+        is rebooted or shut down. 
+        It is used for processes that start early in the boot procedure to store runtime information that they use to function.
+
+/sbin --> check /bin
+
+
+/snap -- The folder where Snap packages are stored. Snap packages are completely self-contained applications that run differently 
+         then regular packages and applications.
+
+/srv -- service directory, where service data is stored. 
+        If you run a server e.g. web server, FTP server you would store the files that will be acessed by external users here. 
+        This allows for better security since it's at the root of the drive and it also allows you to easily mount this folder from another 
+        hard drive.
+
+/sys -- system. It's a way to interact with the kernel. This directory is simular to the /run directory and it's not physically written
+        to the disk, it's created every time the system boots up so you wouldn't store anythong here and nothing gets installed here.
+
+/tmp -- temporary. This is where files are temporary stored by applications that could be used during a SESSION. 
+
+/usr -- user application space, where applications will be installed that are used by user, 
+        as opposed to the /bin and /sbin directories is used by the system and system administrator to perform maintenance.
+
+        It's also known as "UNIX system resource" and any applications installed here considered NON ESSENTIAL for basic system operation 
+        installed applications.
+
+/var -- variable directory. It contains files and directories that are expected to grow in size e.g. /var/log contains 
+        log files for both the system and many different applications which will constantly grow in size as you use the system.
+
+        You'll also find other things in here like databases for mail and temporary storage for printer queues also known as the SPOOL. 
+
+
+
+AN EPILOGUE
+
+    When it come to adding and removing software your distribution will have a PACKAGE MANAGER that will handle all this for you.
+    PACKAGE MANAGER tracks where everything is going so that when you remove your package it take all those files with it.
+
+
+    cat file.txt 1> /dev/null
+    # /dev/null, or the BIT BUCKET, is used AS A GARBAGE CAN for the command line
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+            /sbin has these commands
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+/sbin -- "system binaries" or "super /bin" has special commands that only administrators would use to administer the system.
+         
+         The files/commands in /sbin needs to be run with root privilegies:
+
+         $ sudo /sbin/adduser
+
+
+
+/bin has essential commands
+/sbin has super essential commands
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                    SD vs SSD
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+https://www.partitionwizard.com/partitionmagic/ssd-vs-sd-card.html
+
+If you hesitate between SSDs and SD cards, find the differences between them and then make a decision. In this post, MiniTool Partition Wizard illustrates the topic “SSD vs SD card” from several aspects.
+
+On This Page :
+SSD vs SD Card: Physical Size
+SSD vs SD Card: Capacity
+SSD vs SD Card: Speed
+SSD vs SD Card: Usage
+SSD vs SD Card: Price
+Use SSDs or SD Cards
+
+
+
+SSD vs SD Card: Capacity
+
+Capacity is another important difference between SSD and SD card. SD cards usually have smaller capacities because they use less expensive materials and manufacturing processes than SSDs. For instance, they don’t use the same level of encryption or wear-leveling as SSDs, which limits their lifespan and performance.
+
+The largest available SD card is 1TB, while the largest SSD is 8TB.
+
+
+
+SSD vs SD Card: Speed
+
+The read/write speed of the fastest SD card is up to 300/299MB/s. As for SSDSs, their common read and write speeds range from 300 to 600MB/s. The speed of some advanced SSDs is even higher than that. You can manually perform an SD card/SSD speed test by using MiniTool Partition Wizard to know the exact speed of your device.
+
+
+SSD vs SD Card: Usage
+
+SSD usually are used in desktop and laptop computers to store the operating system, programs, and user data. SD cards are often used in digital cameras, smartphones, and other portable devices to store pictures, music, and other files.
+
+
+SSD vs SD Card: Price
+
+Since SD cards are smaller in physical size and capacity than SSDs, they charge you less money. Besides, SSDs demand more manufacturing time, so they cost more to produce. Due to reasons like that, the price of SSDs is often higher than that of SD cards.
+
+Though there are some differences between SSD and SD card, they share some similarities. For instance, both of them are storage devices that use flash memory. Besides, they are small and portable, so you can take them anywhere.
+
+Last but not the least, both SSDs and SD cards have a limited lifespan. Therefore, you need to replace them before they fail to work if you use them to store data for decades.
+
+Tips:
+SDs can last 10 years or more, but the specific lifespan various according to the write-and-erase cycles. Most SSDs can last more than five years, while the most durable SSDs have a lifespan of over 10 years.
+
+Use SSDs or SD Cards
+Both SSDs and SD cards have advantages and disadvantages. You just need to select a suitable one according to your condition. It is recommended to use SD cards if you are in the following cases.
+
+
+
+
+
+
+https://www.maketecheasier.com/sd-card-vs-ssd/
+
+
+This is important because differences in NAND flash almost entirely depend on how they are grouped into cells:
+
+Single-layer cell (SLC) – stores one bit per cell. This is by far the most expensive option. In normal consumer products, it’s only used for caching on SSDs and some high-end SD cards (though some SSDs like NVMe drives tend to use RAM chips for cache). Each block can be written to 100,000 times, making it the most durable option.
+
+
+Multi-level cell (MLC) – stores two or more bits, but most often stores two bits. This type of storage grouping is not common but is significantly cheaper than SLC technology. Blocks can be written to 40,000 times on average.
+
+
+Triple-level cell (TLC) – is a cell that stores three bits. This is actually the most common type of cell found on SSDs. Although block endurance is significantly lower than in the other variants described above (3,000 write cycles on average), it’s more than enough for typical home use.
+
+
+Quad-level cell (QLC) – stores four bits, as you may have guessed. Some high-capacity drives opt for this as it offers much cheaper storage for archiving, but the block endurance rating of 1,000 write cycles can be punishing on computers using the drive for caching or swap/page file.
+
+
+
+
+
+Also FAQ block:
+
+1. What does “N-bit MLC” mean?
+Since multi-level cell (MLC) means “two or more bits per cell,” some companies will not use TLC or QLC terms to describe their drives. If you’re looking at an SSD’s specs and it says something like “3-bit MLC,” that just means it’s a triple-level cell (TLC) drive.
+
+2. Why is cache so important?
+When data is written to your SSD, the controller has to find a location to write it to. Because of wear-leveling and other technologies that help balance the drive, it may have to “think” for a while before it settles on a spot where it can put your new data. If you’re doing this heavily on a regular basis, this “thinking” period will be noticeable unless the drive has somewhere to put the backlog. Cache acts as a temporary container for this backlog.
+
+3. What are speed classes for on SD cards?
+Speed class on an SD card is used to determine what kind of video you can record live directly to storage. A class 2 card can record compressed video while class 10 can do full HD (1920×1080 resolution).
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                    SheBang learning 
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                The aricle:
+                                                https://realpython.com/python-shebang/
+
+
+
+SheBang(HashBang) is only needed by SCRIPT FILES (the files that interpreter will be reading) 
+in program languages like: Python, JavaScript, etc.
+
+SheBangs aren't for precompiled source code
+in program languages like: C, C++, Rust, etc.
+
+
+
+
+Note: The shebang is only recognized by shells, such as Z shell or Bash, 
+      running on Unix-like operating systems, including macOS and Linux distributions. 
+
+
+      It bears no particular meaning in the Windows terminal, which treats the shebang as an ordinary comment by ignoring it.
+
+      Alternatively, Windows lets you make a global file association between a file extension like .py and a program, 
+      such as the Python interpreter, to achieve a similar effect.
+
+
+
+
+
+
+
+
+A SHEBANG IS ONLY RELEVANT TO RUNNABLE SCRIPTS THAT YOU WISH TO EXECUTE WITHOUT EXPLICITLY SPECIFYING THE PROGRAM TO RUN THEM THROUGH. 
+
+As long as the script’s content starts with 
+1-- a correctly defined shebang line 
+2-- and your system user has permission to execute the corresponding file, 
+== you can omit the python3 command to run that script.
+
+
+
+
+
+
+You wouldn’t typically put a shebang in a Python module that only contains function and class definitions meant for importing from other modules. 
+Therefore, use the shebang when you don’t want to prefix the command that runs your Python script with (python or python3).
+
+
+
+
+
+On many Linux distributions, (python3) is an executable file that’s been compiled down to 
+the Executable and Linkable Format (ELF), which you can take a peek at using the (hexdump) command.
+
+
+
+
+
+
+Unless you include a shebang at the beginning of the file, the shell will assume that your script is written in the corresponding shell language. 
+For example, if you’re on the Bash shell, then the shell will expect to find the Bash commands in your file:
+
+$ ./script.py
+# => ./script.py: line 1: syntax error near unexpected token `"Hello, World!"'
+# => ./script.py: line 1: `print("Hello, World!")'
+
+
+
+
+
+
+Note: NEVER USE THE BARE (python) COMMAND IN A SHEBANG because it may map to either (python2 or python3), 
+      depending on the operating system and its configuration. 
+      The only exception would be if you wrote the script in a backward-compatible way and wanted it to run through both Python versions. 
+
+      You can find out more about the recommended practices in PEP 394.
+
+
+
+
+
++---+---+---+---+---+---+---+---+--- SheBang + if __name__ == "__main__"
+
+It’s not uncommon to combine a shebang with the name-main idiom, 
+which prevents the main block of code from running when someone imports the file from another module:
+
+#!/usr/bin/python3
+
+if __name__ == "__main__":
+    print("Hello, World!")
+
+
+
+
+
++---+---+---+---+---+---+---+---+---+--- How Can You Define a Portable Shebang
+
+
+Unfortunately, hard-coding an absolute path in the shebang isn’t super portable across systems, even within the Unix family. 
+
+What if Python came installed in a different location 
+or the (python3) command was replaced with (python)? 
+
+What about using a virtual environment or pyenv? 
+
+Currently, you’ll always run your script through the operating system’s default Python interpreter.
+
+
+
+
+
+Remember that you can’t specify a relative path in a shebang, as it always has to be absolute. 
+
+Because of this limitation, many developers have adopted a work-around by using the /usr/bin/env command, 
+which can figure out the actual path to the Python interpreter:
+
+
+When invoked without any arguments, the /usr/bin/env command will display the environment variables defined in your shell. 
+
+Its (env) primary purpose, though, is to run a program in a modified environment, letting you temporarily override certain variables. 
+
+
+
+For example, you can change the language of a given program by setting the LANG variable with it:
+
+$ /usr/bin/env LANG=es_ES.UTF_8 git status
+# => En la rama master
+# => Tu rama está actualizada con 'origin/master'.
+# => 
+# => nada para hacer commit, el árbol de trabajo está limpio
+
+The git status command would normally display this message in your default language, but here, you request Spanish. 
+
+Note that not every program supports multiple languages, and you might need to install an additional language pack on your operating system first for it to take effect.
+
+
+
+
+
+The nice thing about /usr/bin/env is that you don’t have to change any environment variables whatsoever to run a command:
+
+$ /usr/bin/env python3
+# => Python 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] on linux
+# => Type "help", "copyright", "credits" or "license" for more information.
+# => >>> 
+
+
+
+
+
+
++---+---+---+---+---+---+---+---+---+--- why the (env) command is good then it comes to virtual environments.
+
+
+/usr/bin/env python3 is quite useful when you consider that
+activating a Python virtual environment modifies the PATH variable in your current terminal session 
+by prepending the parent folder of the Python executable in the active virtual environment.
+
+
+#setting up the python virtual environment
+#python venv is being set up
+
+$ which python3
+/usr/bin/python3
+
+$ python -m venv venv/
+$ source venv/bin/activate
+
+(venv) $ which python3
+/home/realpython/venv/bin/python3
+
+(venv) $ echo $PATH
+/home/realpython/venv/bin
+⮑:/home/realpython/.local/bin:/usr/local/sbin:/usr/local/bin
+⮑:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+⮑:/snap/bin:/home/realpython/.local/bin:
+
+
+When there’s no active virtual environment in your shell, the python3 command is short for /usr/bin/python3. 
+But, as soon as you create and activate a new virtual environment, that same command points to the Python executable in a local venv/ folder. 
+
+You can see why that happens by inspecting the PATH variable, which now starts with this folder, taking precedence over the globally installed Python interpreter.
+
+
+
+
+
+
++---+---+---+---+---+---+---+---+---+--- How to pass arguments in the SheBang.
+
+
+
+
+#!/usr/bin/env python3 -i
+print("Hello World!")
+
+
+$ ./script.py
+# => /usr/bin/env: ‘python3 -i’: No such file or directory
+# => /usr/bin/env: use -[v]S to pass options in shebang lines
+
+Fortunately, there’s a quick fix for that, which the error message hints at. 
+You can use the /usr/bin/env command’s (-S) option to split the string that follows into separate arguments passed to the interpreter:
+
+#!/usr/bin/env -S python3 -i
+print("Hello, World!")
+
+$ ./script.py
+# => Hello World!
+
+
+
+
+
+
++---+---+---+---+---+---+---+---+---+--- SUMMARY
+
+To sum up, here are a few rules that you should follow to successfully use a shebang in your Python scripts:
+
+    -Remember that a shebang is only applicable to runnable scripts on Unix-like operating systems.
+
+    -When you don’t specify a shebang, your shell will attempt to interpret the script as if it were written in the corresponding shell language.
+
+    -Don’t place a shebang in plain Python modules that are only meant to be imported and not executed.
+
+    -Make sure that your script is saved in an executable file.
+
+    -Consider combining a shebang with the name-main idiom (if __name__ == "__main__":).
+
+    -Begin your script with a shebang line, and don’t place any other comments before it.
+
+    -Start the shebang with a #! sequence of characters to distinguish it from a standard comment.
+
+    -Use the /usr/bin/env python3 command to avoid hard-coding an absolute path to any specific Python interpreter.
+
+    -Avoid using the bare python command unless your script is intentionally backward-compatible with Python 2. Generally, you should use the more explicit python3.
+
+    -Enable the -S flag if you need to pass extra arguments to the interpreter—for example, #!/usr/bin/env -S python3 -i.
+
+    -Be cautious about the number of characters that you put into your shebang line.
+
+    -Finally, ask yourself if you need to add the shebang manually or if it could be generated automatically or replaced with some higher-level abstraction by a utility in your toolchain.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+                           How does The Internet work?
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+Let's say you've dialed into your ISP from home and the message must be transmitted over the phone line. 
+Therefore the message must be translated from alphabetic text into electronic signals, transmitted over the Internet, then translated back into alphabetic text. How is this accomplished? 
+
+Through the use of a protocol stack. 
+Every computer needs one to communicate on the Internet and it is usually built into the computer's operating system (i.e. Windows, Unix, etc.). 
+The protocol stack used on the Internet is refered to as the TCP/IP protocol stack because of the two major communication protocols used.
+
+
+
+
+
+
+
+Protocol Layer                                              Comments
+------------------------------------------------------------------------------------------------------------------------------
+Application Protocols Layer                                 Protocols specific to applications such as WWW, e-mail, FTP, etc.
+
+Transmission Control Protocol Layer                         TCP directs packets to a specific application on a computer using a port number.
+
+Internet Protocol Layer                                     IP directs packets to a specific computer using an IP address.
+
+Hardware Layer                                              Converts binary packet data to network signals and back. (E.g. ethernet network 
+                                                            card, modem for phone lines, etc.)
+
+
+
+
+
+
+One of the most commonly used SERVICES on the Internet 
+is the World Wide Web (WWW).
+
+(WWW) IS NOT A PROTOCOL. It's an application above the TCP layer.
+
+
+
+
+The application protocol that makes the web work is Hypertext Transfer Protocol or HTTP.
+
+HTTP is the protocol that web browsers and web servers use to communicate with each other over the Internet. 
+
+It is an application level protocol because it sits on top of the TCP layer in the protocol stack 
+and is used by specific applications to talk to one another. 
+In this case the applications are web browsers and web servers.
+
+
+
+
+
+
+The purpose of the modern HOME ROUTER is not only for routing packets, also it capable to BE A SWITCH and WIRELESS ACCESS POINT(wi-fi) at the same time.
+In short, the modern home router can be a mixture of a 3 devices:
+-router
+-switch (it is needed for convinient LAN setup)
+-access point(wi-fi)
+
+
+
+
+
+
+====== LAN vs WAN
+======
+======
+======
+
+
+Local Area Network -- is a network of computers connected with each other with the help of SWITCH device(s)
+
+
+
+Wide Area Network -- is a different LANs connected with each other 
+                     (The Internet is also can be considered as the biggest WAN in the world).
+
+                     The WAN can only be created by using ROUTERS
+                     (IDC for now if only 1 router in the middle of LANs can create a WAN;
+                     https://youtu.be/zN8YNNHcaZc?si=wKJoybYnyNoXTY_f&t=4486
+                     https://youtu.be/zN8YNNHcaZc?si=Zil6HA-j0UH0dt8B&t=4860 -- the answer is - yes).
+
+
+In summary: SWITCHES needed to create a LAN;
+            ROUTERS - to create a WAN (also, they form The Internet).
+
+
+
+
+
+
+
+
+====== POPs of local ISPs
+======
+======
+======
+
+Different (local Internet Service Providers) can own several POPs (Point of Presences--Точек Присутствия) one for each land area(in e.g. for each neighborhood).
+
+POP -- is a small office of a local ISP.
+       The POP always needs at least one of THE ROUTERs THAT HAVE DISTRIBUTED OVER THE INTERNET
+       (I think of this like, the POP always needs to have at least 1 router connected to The Internet(or to the Regional ISP))
+
+       Also POP can have other additional devices like: switches, routers, servers, etc.
+
+
+
+
+
+====== local ISPs and regional ISPs and global ISPs
+======
+======
+======
+
+
+local ISPs for example can connect differnt neighborhoods in a city, 
+while regional ISPs can connect different cities within a country.
+
+The combination of (local ISPs + regional ISPs) of a country form THE NETWORK OF THAT COUNTRY.
+
+
+the global ISPs connect different countries 
+and most importantly continents by optic cables laying under the water(at the bottom of the oceans!)
+
+
+some (local ISPs) can be connected directry to (global ISPs) avoiding (regional ISP).
+
+
+======
+======
+======
+======
+
+(The Interner Backbone) is a network of (global ISPs)
+
+
+
+====== client(software) + server(software) = network application
+======
+======
+======
+
+The network application is usually DIVIDED INTO A (CLIENT) AND A (SERVER) pieces(or categories).
+The client application is initiating a request for data and
+the server's software is answering the request across the network.
+
+A WEB BROWSER IS A CLIENT APPLICATION.
+
+
+
+
+
+
+
+
+======
+======
+======
+======
+
+All network devices (router, switch, hub) that help computers to communicate with each other are called (NODEs)
+
+
+
+====== 3 types of routers
+====== home / edge / core
+======
+======
+
+-home router (is a mix of: modem, switch, router, wifi (signal generator/reciever) access point)
+
+-edge router
+
+-core router
+
+https://youtu.be/Nnh_z8fWJuY?si=Lw9th2T-KsYWJj90&t=301
+
+
+====== 2 types of IP addresses
+====== private and public
+======
+======
+
+private IP addresses:
+
+    -are only used inside LANs
+
+    -we can't exchange data directly between (device with private IP) and (device with public IP).
+
+    -private IPs are assigned by LAN ADMINISTRATOR
+
+    -are unique only inside one LAN
+
+    -private IPs don't cost anything
+
+    -have differ IP ranges from public IP addresses
+     (typical private IP looks like this: 192.168.x.x)
+
+
+public IP addresses:
+
+    -are used inside WANs, therefore, also over The Internet 
+
+    -are assigned by ISP or IANA(Internet Assigned Numbers Authority)
+
+    -are unique globally
+
+    -have cost assosiated with them
+
+    -have differ IP ranges from private IP addresses
+
+
+
+
+====== splitting IP number into (IP network portion) and (IP host portion)
+======
+====== subnet mask (маска подсети)
+======
+======
+
+
+
+
+
+
+
+
+
+
+
+
+====== IP classes
+====== private and public IP ranges
+======
+======
+
+
+ALL ~4.3 BILLION IPs ARE SPLITTED TO CLASSES FOR EASIER MANAGEMENT AND ASSIGNMENT.
+
+IP addresses are organized in NUMERIC ORDER in 5 classes -- A B C D E
+A -- from   0    .0.0.0   to   127  .255.255.255
+B -- from   128  .0.0.0   to   191  .255.255.255
+C -- from   192  .0.0.0   to   223  .255.255.255
+D -- from   224  .0.0.0   to   239  .255.255.255
+E -- from   240  .0.0.0   to   255  .255.255.255
+
+
+A B C -- are used for the host addresses
+D     --          for multicast
+E     --          for expiremental purposes
+
+
+

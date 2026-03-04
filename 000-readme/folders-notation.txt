@@ -1,0 +1,12 @@
+# Folders notation
+
+- 0XX - Important path
+- 1XX - Application/program related (programs, installers, configs, etc)
+- 2XX - Project
+- 3XX - Media or other
+- 4XX - Media or other
+- 5XX -
+- 6XX -
+- 7XX -
+- 8XX -
+- 9XX -

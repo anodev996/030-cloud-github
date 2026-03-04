@@ -1,0 +1,45 @@
+# AM/PM
+#--date=format:'%d %b %I:%M %p'
+# 24 hour
+#--date=format:'%d %b %H:%M'
+
+[user]
+	email = 227145436+anodev996@users.noreply.github.com
+	name = Badulin Ilya
+[alias]
+	ladog = log --all --decorate --oneline --graph
+
+	# Aliases below only works in unix compatable shell, because of '\'
+	lg = log --graph --all --color=auto \
+	--format=format:'%C(dim green)%h %C(reset)%s %C(dim white)- %an\
+%C(reset)%C(auto)%d'
+
+	lgt = log --graph --all --color=auto \
+	--format=format:'%C(dim green)%h %C(reset)%C(dim red)- %C(reset)\
+%C(green)(%ar) %C(reset)%s %C(dim white)- %an%C(reset)%C(auto)%d'
+
+
+	lgd = log --graph --all --color=auto \
+	--date=format:'%d %b %I:%M %p' \
+	--format=format:'%C(dim white)[%h] %C(reset)%C(dim white)%ad%C(auto)%d%n\
+%C(reset)%s%n'
+
+	lgda = log --graph --all --color=auto \
+    --date=format:'%d %b %I:%M %p' \
+	--format=format:'%C(dim white)[%h] %C(reset)%C(dim white)%ad%C(auto)%d%n\
+%C(reset)%s%n  %C(reset)%C(brightblue)A:%C(reset)%C(dim white)%an \
+%C(reset)%C(brightcyan)C:%C(reset)%C(dim white)%cn%n'
+
+
+	color-test = log --graph --all --color=auto -n 1 \
+	--format=format:'%C(dim green)%h%C(reset dim red) - %C(reset green)(%ar) \
+%C(reset white)%s %C(reset dim white)- %an%C(reset)%C(auto)%d%C(reset)%n\
+\
+%C(brightred)test%C(reset)%n%C(red)test%C(reset)%n%C(dim red)test%C(reset)%n\
+%C(brightgreen)test%C(reset)%n%C(green)test%C(reset)%n%C(dim green)test%C(reset)%n\
+%C(brightyellow)test%C(reset)%n%C(yellow)test%C(reset)%n%C(dim yellow)test%C(reset)%n\
+%C(brightblue)test%C(reset)%n%C(blue)test%C(reset)%n%C(dim blue)test%C(reset)%n\
+%C(brightmagenta)test%C(reset)%n%C(magenta)test%C(reset)%n%C(dim magenta)test%C(reset)%n\
+%C(brightcyan)test%C(reset)%n%C(cyan)test%C(reset)%n%C(dim cyan)test%C(reset)%n\
+%C(brightwhite)test%C(reset)%n%C(white)test%C(reset)%n%C(dim white)test%C(reset)%n\
+%C(brightblack)test%C(reset)%n%C(black)test%C(reset)%n%C(dim black)test%C(reset)'

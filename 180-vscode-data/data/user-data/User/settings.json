@@ -1,0 +1,30 @@
+{
+    /* Disabled
+    
+    */
+    "workbench.colorTheme": "Gruvbox Dark Hard",
+    "editor.rulers": [
+        {
+            "column": 80,
+            "color": "#2c7219"
+        },
+        {
+            "column": 100,
+            "color": "#2c7219"
+        }
+    ],
+    "editor.minimap.autohide": "mouseover",
+    "editor.scrollbar.verticalScrollbarSize": 26,
+    
+    // update
+    "update.mode": "none",
+    
+    // git/github
+    "git.enabled": false,
+    "git.ignoreMissingGitWarning": true,
+    "git.autorefresh": false,
+    "git.decorations.enabled": false,
+    "git.countBadge": "off",
+    "git.openRepositoryInParentFolders": "never",
+    "github.gitAuthentication": false,
+}

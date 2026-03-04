@@ -1,0 +1,33 @@
+# do not work in mysql v8---
+#GRANT ALL ON publications.* TO ''@localhost IDENTIFIED BY '';
+#---
+
+
+CREATE USER 'user'@'localhost'
+  IDENTIFIED BY 'pswd';
+
+GRANT ALL
+  ON *.*
+  TO 'user'@'localhost'
+  WITH GRANT OPTION;
+
+
+
+CREATE USER ''@'localhost'
+  IDENTIFIED BY '';
+
+GRANT ALL
+  ON *.*
+  TO ''@'localhost'
+  WITH GRANT OPTION;
+
+
+
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON *.* TO 'user'@'localhost';
+
+
+CREATE USER ''@'localhost';
+GRANT ALL ON *.* TO ''@'localhost';
+
+https://stackoverflow.com/questions/36301100/how-do-i-turn-off-the-mysql-password-validation
